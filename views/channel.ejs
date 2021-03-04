@@ -11,6 +11,12 @@
   <h1><%= channel.name %></h1>
   <h2><%= channel.description %></h2>
   <h3>Posts:</h3>
+  <ul>
+    <% channel.posts.forEach( post => { %>
+    <li><%= post.by %>:<%= post.content %>:<%= post.date %></li>
+    <% }) %>
+  </ul>
+  
   <form id="form" method="POST" action="/channel/<%= channel._id %>">
     <input type="text" name="by" placeholder="Username" id="by" autocomplete="off"><br>
     <textarea name="content" cols="30" rows="7" placeholder="Post" id="content" autocomplete="off"></textarea><br>
