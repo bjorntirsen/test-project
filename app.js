@@ -1,6 +1,8 @@
+const path = require('path');
 const express = require('express');
 const app = express();
-exports.app = app;
+
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/test-project', {

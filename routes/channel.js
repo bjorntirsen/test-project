@@ -1,7 +1,10 @@
+const path = require('path');
 const express = require('express');
 const router = express.Router();
 
 router.use(express.urlencoded({ extended: true }));
+
+router.use('/public', express.static(path.join(__dirname, 'public')));
 
 const Channel = require('../models/channel');
 const Post = require('../models/post');
@@ -18,7 +21,15 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/:id', (req, res) => {
-  console.log(req.body);
+  if (req.body.content == undefined) {
+    alert('Username and Post cannot be empty');
+  } else {
+    const post = new Post({
+      by: req.body.by,
+      content: req.body.content || '',
+    });
+    //console.log(req.body);
+  }
   renderChannel(req.params.id, res);
 });
 
