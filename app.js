@@ -17,7 +17,10 @@ app.use(express.urlencoded({ extended: true }));
 const Channel = require('./models/channel');
 
 app.get('/', (req, res) => {
-  res.render('index.ejs');
+  Channel.find((err, data) => {
+    if (err) return console.error(err);
+    res.render('index.ejs', { channels: data });
+  })
 });
 
 app.post('/create', (req, res) => {

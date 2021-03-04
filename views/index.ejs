@@ -18,5 +18,11 @@
       <span>Private</span><input type="checkbox" name="private" /><br />
       <input type="submit" value="Create Channel" />
     </form>
+    <h2>Channels:</h2>
+    <ul>
+      <% channels.forEach( channel => { %>
+      <li><%= channel.name %></li>
+      <% }) %>
+    </ul>
   </body>
 </html>
