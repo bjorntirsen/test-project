@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
   Channel.find((err, data) => {
     if (err) return console.error(err);
     res.render('index.ejs', { channels: data });
-  })
+  });
 });
 
 app.post('/create', (req, res) => {
@@ -30,10 +30,18 @@ app.post('/create', (req, res) => {
     private: req.body.private ? true : false,
   });
   channel.save((err) => {
-    if (err) return console.error(err)
-    console.log('Channel created.')
+    if (err) return console.error(err);
+    console.log('Channel created.');
     res.redirect('/');
-  })
+  });
+});
+
+app.get('/delete/:id', (req, res) => {
+  Channel.deleteOne({ _id: req.params.id }, (err, data) => {
+    if (err) return console.error(err);
+    console.log(req.params.id + 'deleted');
+    res.redirect('/');
+  });
 });
 
 app.listen(3000, () => {

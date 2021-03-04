@@ -19,10 +19,17 @@
       <input type="submit" value="Create Channel" />
     </form>
     <h2>Channels:</h2>
-    <ul>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Delete</th>
+      </tr>
       <% channels.forEach( channel => { %>
-      <li><%= channel.name %></li>
+        <tr>
+          <td><%= channel.name %></td>
+          <td><a href="/delete/<%= channel._id %>">X</a></td>
+        </tr>
       <% }) %>
-    </ul>
+    </table>
   </body>
 </html>
