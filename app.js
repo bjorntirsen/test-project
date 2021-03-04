@@ -9,18 +9,28 @@ mongoose.connect('mongodb://localhost:27017/test-project', {
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
-    console.log('Connected to MongoDB');
-  });
+  console.log('Connected to MongoDB');
+});
 
 app.use(express.urlencoded({ extended: true }));
+
+const Channel = require('./models/channel');
 
 app.get('/', (req, res) => {
   res.render('index.ejs');
 });
 
 app.post('/create', (req, res) => {
-  console.log(req.body);
-  res.redirect('/');
+  const channel = new Channel({
+    name: req.body.name,
+    description: req.body.description || '',
+    private: req.body.private ? true : false,
+  });
+  channel.save((err) => {
+    if (err) return console.error(err)
+    console.log('Channel created.')
+    res.redirect('/');
+  })
 });
 
 app.listen(3000, () => {
