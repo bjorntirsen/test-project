@@ -17,6 +17,7 @@ const channelSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
+  posts: [],
 });
 
 module.exports = mongoose.model('Channel', channelSchema);

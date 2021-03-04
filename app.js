@@ -15,6 +15,7 @@ db.once('open', () => {
 app.use(express.urlencoded({ extended: true }));
 
 const Channel = require('./models/channel');
+const Post = require('./models/post');
 
 app.get('/', (req, res) => {
   Channel.find((err, data) => {
