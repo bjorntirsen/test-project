@@ -25,10 +25,10 @@
         <th>Delete</th>
       </tr>
       <% channels.forEach( channel => { %>
-        <tr>
-          <td><%= channel.name %></td>
-          <td><a href="/delete/<%= channel._id %>">X</a></td>
-        </tr>
+      <tr>
+        <td><a href="/channel/<%= channel._id %>"><%= channel.name %></a></td>
+        <td><a href="/delete/<%= channel._id %>">X</a></td>
+      </tr>
       <% }) %>
     </table>
   </body>

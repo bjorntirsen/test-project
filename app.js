@@ -14,36 +14,27 @@ db.once('open', () => {
 
 app.use(express.urlencoded({ extended: true }));
 
+const indexRouter = require('./routes/index');
+
+app.use('/', indexRouter);
+
 const Channel = require('./models/channel');
 const Post = require('./models/post');
 
-app.get('/', (req, res) => {
-  Channel.find((err, data) => {
+app.get('/channel/:id', (req, res) => {
+  Channel.findById(req.params.id, (err, data) => {
     if (err) return console.error(err);
-    res.render('index.ejs', { channels: data });
+    res.render('channel.ejs', { channel: data });
   });
 });
 
-app.post('/create', (req, res) => {
-  const channel = new Channel({
-    name: req.body.name,
-    description: req.body.description || '',
-    private: req.body.private ? true : false,
-  });
-  channel.save((err) => {
+app.post('/channel/:id', (req, res) => {
+  console.log(req.body)
+  Channel.findById(req.params.id, (err, data) => {
     if (err) return console.error(err);
-    console.log('Channel created.');
-    res.redirect('/');
+    res.render('channel.ejs', { channel: data });
   });
-});
-
-app.get('/delete/:id', (req, res) => {
-  Channel.deleteOne({ _id: req.params.id }, (err, data) => {
-    if (err) return console.error(err);
-    console.log(req.params.id + 'deleted');
-    res.redirect('/');
-  });
-});
+})
 
 app.listen(3000, () => {
   console.log('App listening on port 3000');
