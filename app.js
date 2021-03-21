@@ -2,6 +2,18 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const expressEjsLayout = require('express-ejs-layouts');
+const passport = require('passport');
+const session = require('express-session');
+app.use(
+  session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+require('./config/passport')(passport);
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.set('view engine', 'ejs');
 app.use(expressEjsLayout);
