@@ -5,6 +5,10 @@ router.use(express.urlencoded({ extended: true }));
 
 const Channel = require('../models/channel');
 
+router.get('/register', (req, res) => {
+  res.render('register');
+});
+
 router.get('/', (req, res) => {
   Channel.find((err, data) => {
     if (err) return console.error(err);

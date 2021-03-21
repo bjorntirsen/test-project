@@ -21,10 +21,12 @@ db.once('open', () => {
 app.use(express.urlencoded({ extended: true }));
 
 const indexRouter = require('./routes/indexRoute');
-const channelRouter = require('./routes/channelRoute');
+const channelsRouter = require('./routes/channelsRoute');
+const usersRouter = require('./routes/usersRoute');
 
 app.use('/', indexRouter);
-app.use('/channel/', channelRouter);
+app.use('/channels/', channelsRouter);
+app.use('/users/', usersRouter);
 
 app.listen(3000, () => {
   console.log('App listening on port 3000');

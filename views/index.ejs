@@ -17,7 +17,7 @@
   </tr>
   <% channels.forEach( channel => { %>
   <tr>
-    <td><a href="/channel/<%= channel._id %>"><%= channel.name %></a></td>
+    <td><a href="/channels/<%= channel._id %>"><%= channel.name %></a></td>
     <td><a href="/delete/<%= channel._id %>">X</a></td>
   </tr>
   <% }) %>
