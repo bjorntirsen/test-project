@@ -9,12 +9,14 @@ exports = module.exports = (io) => {
       const channelName = getChannelName(socket.handshake.headers.referer);
       socketUsers[socket.id] = { userId, channelName };
       console.log(socketUsers);
+      io.emit('socketUsersUpdated', socketUsers);
     });
 
     socket.on('disconnect', () => {
       if (socketUsers && socketUsers[socket.id]) {
-        delete socketUsers[socket.id]
+        delete socketUsers[socket.id];
+        io.emit('socketUsersUpdated', socketUsers);
       }
-    })
+    });
   });
 };

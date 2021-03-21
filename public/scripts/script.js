@@ -1,14 +1,41 @@
+//Global variables
+const userId = document.getElementById('userId').value;
+
 //Socket script
 const socket = io();
 
 sendUserIdToSocket = () => {
-  const userId = document.getElementById('userId').value;
-  socket.emit('userIdFromClient', userId );
+  socket.emit('userIdFromClient', userId);
 };
+
+socket.on('socketUsersUpdated', (socketUsers) => {
+  renderWhoIsOnline(socketUsers);
+});
+
+renderWhoIsOnline = (socketUsers) => {
+  document.querySelectorAll('.onlineSpan').forEach(e => e.remove());
+  let arrayOfSocketUsers = Object.entries(socketUsers).map(
+    (element) => element[1]
+  );
+  arrayOfSocketUsers.forEach((user) => {
+    let onlineId = user.userId + 'online';
+    if (document.getElementById(onlineId) === null) {
+      const item = document.createElement('span');
+      item.innerHTML = ' online';
+      item.classList.add('onlineSpan')
+      if (user.userId === userId) {
+        item.innerHTML += ' (you)';
+      }
+      item.id = user.userId + 'online';
+      const onlineUser = document.getElementById(user.userId);
+      onlineUser.appendChild(item);
+    }
+  });
+};
+
 //Fetch and render users and channels
 renderChannels = (channelList) => {
   channelList.forEach((channel) => {
-    console.log(channel);
     const li = document.createElement('li');
     const a = document.createElement('a');
     a.href = `../channels/${channel._id}`;
@@ -59,6 +86,7 @@ fetchUsers = () => {
     });
 };
 
+//Functions to run on page load
 document.addEventListener('DOMContentLoaded', () => {
   sendUserIdToSocket();
   fetchChannels();
