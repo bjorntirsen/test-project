@@ -1,35 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Homepage</title>
-  </head>
-  <body>
-    <h1>Homepage</h1>
-    <form method="post" action="/create">
-      <input type="text" name="name" placeholder="Channel name here" /><br />
-      <input
-        type="text"
-        name="description"
-        placeholder="Channel description here"
-      /><br />
-      <span>Private</span><input type="checkbox" name="private" /><br />
-      <input type="submit" value="Create Channel" />
-    </form>
-    <h2>Channels:</h2>
-    <table>
-      <tr>
-        <th>Name</th>
-        <th>Delete</th>
-      </tr>
-      <% channels.forEach( channel => { %>
-      <tr>
-        <td><a href="/channel/<%= channel._id %>"><%= channel.name %></a></td>
-        <td><a href="/delete/<%= channel._id %>">X</a></td>
-      </tr>
-      <% }) %>
-    </table>
-  </body>
-</html>
+<h1>Homepage</h1>
+<form method="post" action="/create">
+  <input type="text" name="name" placeholder="Channel name here" /><br />
+  <input
+    type="text"
+    name="description"
+    placeholder="Channel description here"
+  /><br />
+  <span>Private</span><input type="checkbox" name="private" /><br />
+  <input type="submit" value="Create Channel" />
+</form>
+<h2>Channels:</h2>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Delete</th>
+  </tr>
+  <% channels.forEach( channel => { %>
+  <tr>
+    <td><a href="/channel/<%= channel._id %>"><%= channel.name %></a></td>
+    <td><a href="/delete/<%= channel._id %>">X</a></td>
+  </tr>
+  <% }) %>
+</table>

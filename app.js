@@ -1,7 +1,10 @@
 const path = require('path');
 const express = require('express');
 const app = express();
+const expressEjsLayout = require('express-ejs-layouts');
 
+app.set('view engine', 'ejs');
+app.use(expressEjsLayout);
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 const mongoose = require('mongoose');
@@ -17,8 +20,8 @@ db.once('open', () => {
 
 app.use(express.urlencoded({ extended: true }));
 
-const indexRouter = require('./routes/index');
-const channelRouter = require('./routes/channel');
+const indexRouter = require('./routes/indexRoute');
+const channelRouter = require('./routes/channelRoute');
 
 app.use('/', indexRouter);
 app.use('/channel/', channelRouter);

@@ -9,8 +9,6 @@ const channelSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    minLength: 1,
-    maxLength: 200,
   },
   private: {
     type: Boolean,

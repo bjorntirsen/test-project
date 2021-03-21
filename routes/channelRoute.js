@@ -7,9 +7,9 @@ const Channel = require('../models/channel');
 const Post = require('../models/post');
 
 router.get('/:id', (req, res) => {
-  Channel.findById(req.params.id, (err, data) => {
+  Channel.findById(req.params.id, (err, channel) => {
     if (err) return console.error(err);
-    res.render('channel.ejs', { channel: data });
+    res.render('channel.ejs', { channel: channel });
   });
 });
 
