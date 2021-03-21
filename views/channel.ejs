@@ -1,28 +1,31 @@
 <%- include ('./partials/sidebar') %>
-<h1><%= channel.name %></h1>
-<h2><%= channel.description %></h2>
-<h3>Posts:</h3>
-<ul>
-  <% channel.posts.forEach( post => { %>
-  <li>
-    <span><%= post.by %> wrote on <%= post.date %>:</span><br /><span
-      ><%= post.content %></span
-    >
-  </li>
-  <% }) %>
-</ul>
+<main>
+  <h1><%= channel.name %></h1>
+  <h2><%= channel.description %></h2>
+  <h3>Posts:</h3>
+  <ul>
+    <% channel.posts.forEach( post => { %>
+    <li>
+      <span><%= post.by %> wrote on <%= post.date %>:</span><br /><span
+        ><%= post.content %></span
+      >
+    </li>
+    <% }) %>
+  </ul>
 
-<form id="form" method="POST" action="/channels/<%= channel._id %>">
-  <textarea
-    name="content"
-    cols="30"
-    rows="7"
-    placeholder="Post"
-    id="content"
-    autocomplete="off"
-    required
-  ></textarea
-  ><br />
-  <input type="submit" value="Post" id="submit" />
-</form>
+  <form id="form" method="POST" action="/channels/<%= channel._id %>">
+    <textarea
+      name="content"
+      cols="30"
+      rows="7"
+      placeholder="Post"
+      id="content"
+      autocomplete="off"
+      required
+    ></textarea
+    ><br />
+    <input type="submit" value="Post" id="submit" />
+  </form>
+</main>
+
 <script src="/public/scripts/script.js"></script>

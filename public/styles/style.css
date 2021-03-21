@@ -1,0 +1,14 @@
+nav > ul {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (min-width: 450px) {
+  .sidebar {
+    float: left;
+  }
+
+  main {
+    float: right;
+  }
+}
