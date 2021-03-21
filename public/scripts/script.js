@@ -67,7 +67,7 @@ renderUsers = (users) => {
     img.alt = user.name;
     li.appendChild(img); */
     const a = document.createElement('a');
-    a.href = `../channels/startDM/${user._id}`;
+    a.href = `../channels/DMorProfile/${user._id}`;
     a.innerHTML = user.name;
     li.appendChild(a);
     usersUl.appendChild(li);

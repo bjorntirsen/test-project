@@ -8,7 +8,6 @@ exports = module.exports = (io) => {
     socket.on('userIdFromClient', (userId) => {
       const channelName = getChannelName(socket.handshake.headers.referer);
       socketUsers[socket.id] = { userId, channelName };
-      console.log(socketUsers);
       io.emit('socketUsersUpdated', socketUsers);
     });
 

@@ -3,6 +3,8 @@ const User = require('../models/user');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const passport = require('passport');
+const { ensureAuthenticated } = require('../config/auth.js');
+const { rawListeners } = require('../models/user');
 
 router.use(express.urlencoded({ extended: true }));
 
@@ -84,7 +86,24 @@ router.post('/login', (req, res, next) => {
 router.get('/logout', (req, res) => {
   req.logout();
   const success_msg = 'You are now logged out.';
-  res.render('login', {message: success_msg});
+  res.render('login', { message: success_msg });
+});
+
+//get and post to profile page
+router.get('/profile', ensureAuthenticated, (req, res) => {
+  res.render('profile', { user: req.user });
+});
+
+router.post('/profile', ensureAuthenticated, (req, res) => {
+  const userName = req.body.newUserName;
+  const userEmail = req.body.newUserEmail;
+  User.findOneAndUpdate(
+    { _id: req.user._id },
+    { $set: { name: userName, email: userEmail } }, {new: true}, (err, data) => {
+    if (err) console.log(err);
+    const message = 'Sucessfully edited user details.';
+    res.render('profile', { user: data, message });
+  });
 });
 
 module.exports = router;

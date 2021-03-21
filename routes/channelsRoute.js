@@ -59,4 +59,13 @@ router.post('/:id', ensureAuthenticated, (req, res) => {
   );
 });
 
+//DMorProfile
+router.get('/DMorProfile/:id', ensureAuthenticated, (req, res) => {
+  if (req.params.id === req.user._id.toString()) {
+    res.redirect('/users/profile');
+  } else {
+    res.send('<h1>Here we will add DM functionality</h1>');
+  }
+});
+
 module.exports = router;
