@@ -45,7 +45,8 @@ router.get('/:id', ensureAuthenticated, (req, res) => {
 
 router.post('/:id', ensureAuthenticated, (req, res) => {
   const post = new Post({
-    by: req.body.by,
+    by: req.user.name,
+    byId: req.user._id,
     content: req.body.content,
   });
   Channel.updateOne(
