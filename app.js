@@ -4,6 +4,10 @@ const app = express();
 const expressEjsLayout = require('express-ejs-layouts');
 const passport = require('passport');
 const session = require('express-session');
+const http = require('http').Server(app)
+const io = require('socket.io')(http);
+require('./socket')(io);
+
 app.use(
   session({
     secret: 'secret',
@@ -42,6 +46,6 @@ app.use('/channels/', channelsRouter);
 app.use('/users/', usersRouter);
 app.use('/api/', apiRouter);
 
-app.listen(3000, () => {
+http.listen(3000, () => {
   console.log('App listening on port 3000');
 });

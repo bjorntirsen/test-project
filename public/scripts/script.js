@@ -1,8 +1,14 @@
-/* sidan har laddats så ska vi fetcha users och channels och rendera dom i sidebar */
+//Socket script
+const socket = io();
 
+sendUserIdToSocket = () => {
+  const userId = document.getElementById('userId').value;
+  socket.emit('userIdFromClient', userId );
+};
+//Fetch and render users and channels
 renderChannels = (channelList) => {
   channelList.forEach((channel) => {
-    console.log(channel)
+    console.log(channel);
     const li = document.createElement('li');
     const a = document.createElement('a');
     a.href = `../channels/${channel._id}`;
@@ -53,8 +59,8 @@ fetchUsers = () => {
     });
 };
 
-
 document.addEventListener('DOMContentLoaded', () => {
+  sendUserIdToSocket();
   fetchChannels();
   fetchUsers();
 });
