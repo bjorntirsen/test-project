@@ -9,7 +9,7 @@ router.use(express.urlencoded({ extended: true }));
 router.get('/', ensureAuthenticated, (req, res) => {
   Channel.find((err, data) => {
     if (err) return console.error(err);
-    res.render('index.ejs', { channels: data });
+    res.render('index.ejs', { channels: data, user: req.user });
   });
 });
 
@@ -30,7 +30,7 @@ router.get('/delete/:id', ensureAuthenticated, (req, res) => {
   Channel.deleteOne({ _id: req.params.id }, (err, data) => {
     if (err) return console.error(err);
     console.log(req.params.id + 'deleted');
-    res.redirect('/');
+    res.redirect('/channels');
   });
 });
 
@@ -39,7 +39,7 @@ router.get('/delete/:id', ensureAuthenticated, (req, res) => {
 router.get('/:id', ensureAuthenticated, (req, res) => {
   Channel.findById(req.params.id, (err, channel) => {
     if (err) return console.error(err);
-    res.render('channel.ejs', { channel: channel });
+    res.render('channel.ejs', { channel: channel, user: req.user });
   });
 });
 
