@@ -35,10 +35,12 @@ app.use(express.urlencoded({ extended: true }));
 const indexRouter = require('./routes/indexRoute');
 const channelsRouter = require('./routes/channelsRoute');
 const usersRouter = require('./routes/usersRoute');
+const apiRouter = require('./routes/apiRoute');
 
 app.use('/', indexRouter);
 app.use('/channels/', channelsRouter);
 app.use('/users/', usersRouter);
+app.use('/api/', apiRouter);
 
 app.listen(3000, () => {
   console.log('App listening on port 3000');
