@@ -98,13 +98,17 @@ router.post(
   '/editPost/:channel_id/:post_id',
   ensureAuthenticated,
   (req, res) => {
-    const newContent = req.body.postContent;
-    Post.findByIdAndUpdate(req.params.post_id, {
-      $set: { content: newContent },
-    }).exec((err, data) => {
-      if (err) return console.error(err);
-      res.redirect(`/channels/${req.params.channel_id}`);
-    });
+    if (req.body.byId.toString() === req.user._id.toString()) {
+      const newContent = req.body.postContent;
+      Post.findByIdAndUpdate(req.params.post_id, {
+        $set: { content: newContent },
+      }).exec((err, data) => {
+        if (err) return console.error(err);
+        res.redirect(`/channels/${req.params.channel_id}`);
+      });
+    } else {
+      res.send('<h1>You are not authorized to do this.</h1>');
+    }
   }
 );
 
@@ -125,10 +129,19 @@ router.get(
   '/deletePost/:channel_id/:post_id',
   ensureAuthenticated,
   (req, res) => {
-    Post.findByIdAndDelete(req.params.post_id).exec((err, data) => {
-      if (err) return console.error(err);
-      res.redirect(`/channels/${req.params.channel_id}`);
-    });
+    Post.findById(req.params.post_id)
+      .populate('byId')
+      .exec((err, post) => {
+        if (err) return console.error(err);
+        if (req.user._id.toString() === post.byId._id.toString()) {
+          Post.findByIdAndDelete(req.params.post_id).exec((err, data) => {
+            if (err) return console.error(err);
+            res.redirect(`/channels/${req.params.channel_id}`);
+          });
+        } else {
+          res.send('<h1>You are not authorized to do this.</h1>');
+        }
+      });
   }
 );
 

@@ -8,6 +8,7 @@
     <form method="POST" action="/channels/editPost/<%= channel_id %>/<%= post._id %>">
       <span>Content:</span><br />
       <textarea name="postContent" cols="30" rows="7" ><%= post.content %></textarea><br />
+      <input type="text" name="byId" value="<%= post.byId._id %>" hidden />
       <input type="submit" value="Update post" />
       <a href="/channels/deletePost/<%= channel_id %>/<%= post._id %>" role="button" value="Delete Post" >Delete Post</a>
     </form>

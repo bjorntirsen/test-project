@@ -6,13 +6,15 @@
   <ul>
     <% channel.posts.forEach( post => { %>
     <li>
-      <span><%= post.by %> wrote on <%= post.date %>:</span><br /><span
+      <span><%= post.byId.name %> wrote on <%= post.date %>:</span><br /><span
         ><%= post.content %></span
       ><br>
-      <span>
-        <a href="/channels/editPost/<%= channel._id %>/<%= post._id %> ">Edit</a>
-        <a href="/channels/deletePost/<%= channel._id %>/<%= post._id %> ">Delete</a>
-      </span>
+      <% if (user._id.toString() === post.byId._id.toString()) { %>
+        <span>
+          <a href="/channels/editPost/<%= channel._id %>/<%= post._id %> ">Edit</a>
+          <a href="/channels/deletePost/<%= channel._id %>/<%= post._id %> ">Delete</a>
+        </span>
+      <% } %>
     </li>
     <% }) %>
   </ul>
