@@ -14,7 +14,7 @@
     </form>
     <hr>
     <form action="/users/profile/uploadPhoto" method="POST" enctype="multipart/form-data" >
-      <img src="<%= user.profilePhoto %> " alt="<%= user.name %>">
+      <img class="medium_image" src="<%= user.profilePhoto %> " alt="<%= user.name %>">
       <p>Select new profile photo:</p>
       <input type="file" name="profile_photo" ><br>
       <input type="submit" value="Save" >

@@ -93,6 +93,9 @@ build/Release
 node_modules/
 jspm_packages/
 
+uploads/
+.prettierrc
+
 # Typescript v1 declaration files
 typings/
 
