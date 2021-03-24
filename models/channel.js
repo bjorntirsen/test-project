@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const channelSchema = new mongoose.Schema({
   name: {
@@ -15,7 +16,7 @@ const channelSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
-  posts: [],
+  posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
 });
 
 module.exports = mongoose.model('Channel', channelSchema);
