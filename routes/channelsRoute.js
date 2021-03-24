@@ -78,12 +78,55 @@ router.get('/DMorProfile/:id', ensureAuthenticated, (req, res) => {
 
 //Edit and Delete posts
 router.get(
+  '/editPost/:channel_id/:post_id',
+  ensureAuthenticated,
+  (req, res) => {
+    Post.findById(req.params.post_id)
+      .populate('byId')
+      .exec((err, data) => {
+        if (err) return console.error(err);
+        res.render('editPost', {
+          post: data,
+          user: req.user,
+          channel_id: req.params.channel_id,
+        });
+      });
+  }
+);
+
+router.post(
+  '/editPost/:channel_id/:post_id',
+  ensureAuthenticated,
+  (req, res) => {
+    const newContent = req.body.postContent;
+    Post.findByIdAndUpdate(req.params.post_id, {
+      $set: { content: newContent },
+    }).exec((err, data) => {
+      if (err) return console.error(err);
+      res.redirect(`/channels/${req.params.channel_id}`);
+    });
+  }
+);
+
+router.get(
+  '/editPost/:channel_id/:post_id',
+  ensureAuthenticated,
+  (req, res) => {
+    Post.findById(req.params.post_id)
+      .populate('byId')
+      .exec((err, data) => {
+        if (err) return console.error(err);
+        res.render('editPost', { post: data, user: req.user });
+      });
+  }
+);
+
+router.get(
   '/deletePost/:channel_id/:post_id',
   ensureAuthenticated,
   (req, res) => {
     Post.findByIdAndDelete(req.params.post_id).exec((err, data) => {
       if (err) return console.error(err);
-      console.log(data);
       res.redirect(`/channels/${req.params.channel_id}`);
     });
   }
