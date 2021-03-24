@@ -48,25 +48,6 @@ router.get('/:id', ensureAuthenticated, (req, res) => {
     });
 });
 
-router.post('/:id', ensureAuthenticated, (req, res) => {
-  const post = new Post({
-    by: req.user.name,
-    byId: req.user._id,
-    content: req.body.content,
-  });
-  post.save((err) => {
-    if (err) return console.log(err);
-    Channel.findByIdAndUpdate(
-      req.params.id,
-      { $push: { posts: post } },
-      (err) => {
-        if (err) return console.error(err);
-        res.redirect(`/channels/${req.params.id}`);
-      }
-    );
-  });
-});
-
 //DMorProfile
 router.get('/DMorProfile/:id', ensureAuthenticated, (req, res) => {
   if (req.params.id === req.user._id.toString()) {

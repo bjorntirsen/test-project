@@ -3,7 +3,7 @@
   <h1><%= channel.name %></h1>
   <h2><%= channel.description %></h2>
   <h3>Posts:</h3>
-  <ul>
+  <ul id="postsUL">
     <% channel.posts.forEach( post => { %>
     <li>
       <span><%= post.byId.name %> wrote on <%= post.date %>:</span><br /><span
@@ -19,7 +19,7 @@
     <% }) %>
   </ul>
 
-  <form id="form" method="POST" action="/channels/<%= channel._id %>">
+  <div>
     <textarea
       name="content"
       cols="30"
@@ -28,10 +28,9 @@
       id="content"
       autocomplete="off"
       required
-    ></textarea
-    ><br />
-    <input type="submit" value="Post" id="submit" />
-  </form>
+    ></textarea><br />
+    <button id="postButton">Post</button>
+  </div>
 </main>
 <script src="../socket.io/socket.io.js"></script>
 <script src="/public/scripts/script.js"></script>

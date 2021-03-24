@@ -1,5 +1,7 @@
 //Global variables
 const userId = document.getElementById('userId').value;
+const channelId = window.location.href.split('/').slice(-1)[0];
+const postsUL = document.getElementById('postsUL');
 
 //Socket script
 const socket = io();
@@ -12,8 +14,13 @@ socket.on('socketUsersUpdated', (socketUsers) => {
   renderWhoIsOnline(socketUsers);
 });
 
+socket.on('postFromServer', (post) => {
+  renderPost(post);
+});
+
+//Render functions
 renderWhoIsOnline = (socketUsers) => {
-  document.querySelectorAll('.onlineSpan').forEach(e => e.remove());
+  document.querySelectorAll('.onlineSpan').forEach((e) => e.remove());
   let arrayOfSocketUsers = Object.entries(socketUsers).map(
     (element) => element[1]
   );
@@ -22,7 +29,7 @@ renderWhoIsOnline = (socketUsers) => {
     if (document.getElementById(onlineId) === null) {
       const item = document.createElement('span');
       item.innerHTML = ' online';
-      item.classList.add('onlineSpan')
+      item.classList.add('onlineSpan');
       if (user.userId === userId) {
         item.innerHTML += ' (you)';
       }
@@ -33,28 +40,15 @@ renderWhoIsOnline = (socketUsers) => {
   });
 };
 
-//Fetch and render users and channels
 renderChannels = (channelList) => {
   channelList.forEach((channel) => {
     const li = document.createElement('li');
     const a = document.createElement('a');
-    a.href = `../channels/${channel._id}`;
+    a.href = `/channels/${channel._id}`;
     a.innerHTML = `#${channel.name}`;
     li.appendChild(a);
     channelsUl.insertBefore(li, create);
   });
-};
-
-fetchChannels = () => {
-  fetch('/api/channels', {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      renderChannels(data);
-    });
 };
 
 renderUsers = (users) => {
@@ -67,11 +61,48 @@ renderUsers = (users) => {
     img.alt = user.name;
     li.appendChild(img);
     const a = document.createElement('a');
-    a.href = `../channels/DMorProfile/${user._id}`;
+    a.href = `/channels/DMorProfile/${user._id}`;
     a.innerHTML = user.name;
     li.appendChild(a);
     usersUl.appendChild(li);
   });
+};
+
+renderPost = (post) => {
+  const li = document.createElement('li');
+  li.classList.add('channel__li');
+  const bySpan = document.createElement('span');
+  bySpan.innerHTML = `${post.byId.name} wrote on ${post.date}:`;
+  li.appendChild(bySpan);
+  const contentP = document.createElement('p');
+  contentP.innerHTML = post.content;
+  li.appendChild(contentP);
+  if (userId.toString() === post.byId._id.toString()) {
+    const span = document.createElement('span');
+    const aEdit = document.createElement('a');
+    aEdit.href = `/channels/editPost/${channelId}/${post._id}`;
+    aEdit.innerHTML = 'Edit ';
+    span.appendChild(aEdit);
+    const aDelete = document.createElement('a');
+    aDelete.href = `/channels/deletePost/${channelId}/${post._id}`;
+    aDelete.innerHTML = 'Delete';
+    span.appendChild(aDelete);
+    li.appendChild(span);
+  }
+  postsUL.appendChild(li);
+};
+
+//API functions
+fetchChannels = () => {
+  fetch('/api/channels', {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      renderChannels(data);
+    });
 };
 
 fetchUsers = () => {
@@ -86,9 +117,35 @@ fetchUsers = () => {
     });
 };
 
+sendPostByAPI = () => {
+  const postBody = {
+    content: document.getElementById('content').value,
+    by: userId,
+  };
+  fetch(`/api/channels/${channelId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(postBody),
+  })
+    .then((res) => res.json())
+    .then((newPost) => {
+      socket.emit('postSaved', newPost);
+    });
+};
+
 //Functions to run on page load
 document.addEventListener('DOMContentLoaded', () => {
   sendUserIdToSocket();
   fetchChannels();
   fetchUsers();
 });
+
+if (document.getElementById('postButton') !== null) {
+  document.getElementById('postButton').addEventListener('click', (e) => {
+    e.preventDefault();
+    sendPostByAPI();
+    document.getElementById('content').value = '';
+  });
+}
