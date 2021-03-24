@@ -4,7 +4,6 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const { ensureAuthenticated } = require('../config/auth.js');
-const { rawListeners } = require('../models/user');
 
 router.use(express.urlencoded({ extended: true }));
 
@@ -99,11 +98,35 @@ router.post('/profile', ensureAuthenticated, (req, res) => {
   const userEmail = req.body.newUserEmail;
   User.findOneAndUpdate(
     { _id: req.user._id },
-    { $set: { name: userName, email: userEmail } }, {new: true}, (err, data) => {
-    if (err) console.log(err);
-    const message = 'Sucessfully edited user details.';
-    res.render('profile', { user: data, message });
-  });
+    { $set: { name: userName, email: userEmail } },
+    { new: true },
+    (err, data) => {
+      if (err) console.log(err);
+      const message = 'Sucessfully edited user details.';
+      res.render('profile', { user: data, message });
+    }
+  );
+});
+
+router.post('/profile/uploadPhoto', ensureAuthenticated, (req, res) => {
+  if (req.files) {
+    const profile_pic = req.files.profile_photo;
+    const extension = profile_pic.name.split('.').slice(-1)[0];
+    const file_name = `/uploads/${req.user._id}.${extension}`;
+    profile_pic.mv(`.${file_name}`);
+    User.updateOne(
+      { _id: req.user._id },
+      { $set: { profilePhoto: file_name } },
+      (err) => {
+        if (err) console.log(err);
+        const message = 'File sucessfully uploaded';
+        res.render('profile', { user: req.user, message });
+      }
+    );
+  } else {
+    const message = 'No file uploaded';
+    res.render('profile', { user: req.user, message });
+  }
 });
 
 module.exports = router;
